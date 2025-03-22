@@ -26,7 +26,11 @@ function Sidebar({ menuItems }) {
         </div>
       </div>
 
-      <nav className="flex flex-col gap-[8px] p-4 flex-grow">
+      <nav className="flex flex-col gap-2 p-4 flex-grow overflow-y-auto [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
         {menuItems.map((item, index) => {
           const isActive = location.pathname === item.path;
           return <>

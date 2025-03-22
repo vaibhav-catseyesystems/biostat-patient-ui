@@ -40,6 +40,7 @@ function useHealthData() {
     { icon: "🏠", title: "Dashboard", active: true, path: "/dashboard" },
     { icon: "👤", title: "Profile", active: false, path: "/dashboard/profile" },
     { icon: "🗓️", title: "Appointments", active: false, path: "/dashboard/appointments" },
+    { icon: "🏥", title: "Health Check", active: false, path: "/dashboard/health-check" },
     { icon: "💊", title: "Medications", active: false, path: "/dashboard/medications" },
     { icon: "🔬", title: "Lab Results", active: false, path: "/dashboard/lab-results" },
     { icon: "📝", title: "Medical Records", active: false, path: "/dashboard/medical-reports" },

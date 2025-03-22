@@ -13,6 +13,8 @@ import LabResultsPage from "./pages/LabResultsPage";
 import MessagesDashboard from "./pages/MessagesDashboard";
 import LandingHomePage from "./pages/LandingHomePage";
 import AuthPage from "./pages/AuthPage";
+import HealthCheckPage from "./pages/HealthCheckPage";
+import MedicalHistoryPage from "./pages/MedicalHistoryPage";
 
 function App() {
   const { menuItems } = useHealthData();
@@ -48,7 +50,9 @@ function App() {
         >
           <Route path="/dashboard" element={<HealthDash />} />
           <Route path="/dashboard/profile" element={<ProfilePage />} />
+          <Route path="/dashboard/med-history" element={<MedicalHistoryPage />} />
           <Route path="/dashboard/appointments" element={<AppointmentsPage />} />
+          <Route path="/dashboard/health-check" element={<HealthCheckPage />} />
           <Route path="/dashboard/medications" element={<MedicationPage />} />
           <Route path="/dashboard/lab-results" element={<LabResultsPage />} />
           <Route path="/dashboard/medical-reports" element={<MedicalRecordsPage />} />
