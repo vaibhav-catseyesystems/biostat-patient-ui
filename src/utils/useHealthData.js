@@ -38,12 +38,14 @@ function useHealthData() {
 
   const [menuItems] = useState([
     { icon: "🏠", title: "Dashboard", active: true, path: "/dashboard" },
+    { icon: "👨‍👩‍👧‍👦", title: "Family", active: true, path: "/dashboard/family-page" },
     { icon: "👤", title: "Profile", active: false, path: "/dashboard/profile" },
     { icon: "🗓️", title: "Appointments", active: false, path: "/dashboard/appointments" },
     { icon: "🏥", title: "Health Check", active: false, path: "/dashboard/health-check" },
     { icon: "💊", title: "Medications", active: false, path: "/dashboard/medications" },
     { icon: "🔬", title: "Lab Results", active: false, path: "/dashboard/lab-results" },
     { icon: "📝", title: "Medical Records", active: false, path: "/dashboard/medical-reports" },
+    { icon: "🥗", title: "Diet", active: false, path: "/dashboard/diet-page" },
     { icon: "✉️", title: "Messages", active: false, path: "/dashboard/messages" },
     { icon: "⚙️", title: "Settings", active: false, path: "/dashboard/settings" },
   ]);
@@ -52,7 +54,7 @@ function useHealthData() {
     { title: "Appointments", icon: "🗓️", count: 2 },
     { title: "Medications", icon: "💊", count: 4 },
     { title: "Lab Results", icon: "🔬", count: 1 },
-    { title: "Messages", icon: "✉️", count: 3 },
+    { title: "Message" ,icon: "✉️", count: 3 },
   ]);
 
   return {

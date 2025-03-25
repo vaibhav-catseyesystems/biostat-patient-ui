@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ProfileSection = () => {
+const ProfileSection = ({ isEditing, setIsEditing }) => {
   return (
     <section className="flex max-sm:flex-col items-center gap-[24px]">
       <div className="relative">
@@ -23,8 +23,11 @@ const ProfileSection = () => {
         </h1>
         <p className="text-[16px] text-[#64748B]">Patient ID: #12345</p>
         <div className="flex gap-[16px] mt-[16px] max-sm:flex-col max-sm:w-full">
-          <button className="bg-[#4318D1] text-white px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full">
-            ✏️ Edit Profile
+        <button
+            className="bg-[#4318D1] text-white px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full"
+            onClick={() => setIsEditing((prev) => !prev)} //  Toggle edit mode
+          >
+            {isEditing ? "💾 Save Profile" : "✏️ Edit Profile"}
           </button>
           <Link to={'/dashboard/med-history'} className="bg-[#F1F5F9] text-[#1E293B] px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full">
             📋 Medical History

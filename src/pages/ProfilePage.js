@@ -1,24 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import ProfileSection from "../components/Profile/ProfileSection";
 import InfoCard from "../components/Profile/InfoCard";
 import DiseaseProfile from "../components/Profile/DiseaseProfile";
 
 function ProfilePage() {
-  const personalInfo = [
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [personalInfo, setPersonalInfo] = useState([
     { label: "Date of Birth", value: "March 15, 1985" },
     { label: "Gender", value: "Female" },
     { label: "Blood Type", value: "O+", isBold: true },
     { label: "Height", value: "5'6\"" },
     { label: "Weight", value: "140 lbs" },
-  ];
+  ]);
 
-  const contactInfo = [
+  const [contactInfo,setContactInfo] = useState([
     { label: "Email", value: "sarah.j@email.com" },
     { label: "Phone", value: "(555) 123-4567" },
     { label: "Address", value: "123 Health St, NY" },
     { label: "Emergency Contact", value: "John (Husband)" },
     { label: "Emergency Phone", value: "(555) 987-6543" },
-  ];
+  ]);
 
   const diseases = [
     {
@@ -92,21 +95,24 @@ function ProfilePage() {
       {/* <Sidebar /> */}
       <main className="flex-1 max-sm:p-4 overflow-auto">
         <div className="flex flex-col gap-[32px]">
-          <ProfileSection />
+          <ProfileSection  isEditing={isEditing} setIsEditing={setIsEditing} />
 
           <section className="grid grid-cols-2 max-sm:grid-cols-1 gap-[24px]">
             <InfoCard
               title="Personal Information"
               icon="👤"
               items={personalInfo}
+              isEditing={isEditing}
+              setItems={setPersonalInfo}
             />
             <InfoCard
               title="Contact Information"
               icon="📞"
               items={contactInfo}
+              isEditing={isEditing}
+              setItems={setContactInfo}
             />
           </section>
-
           <section className="flex flex-col gap-[24px]">
             <header className="text-[24px] max-sm:text-[20px] font-semibold text-[#1E293B] flex items-center gap-3 max-sm:flex-col max-sm:items-start">
               <h2>🏥 Disease Profile</h2>

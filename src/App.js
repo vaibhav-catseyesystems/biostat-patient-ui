@@ -1,3 +1,4 @@
+
 import { Routes, Route, Outlet } from "react-router-dom";
 import HealthDash from './pages/HealthDash';
 import './index.css';
@@ -15,6 +16,8 @@ import LandingHomePage from "./pages/LandingHomePage";
 import AuthPage from "./pages/AuthPage";
 import HealthCheckPage from "./pages/HealthCheckPage";
 import MedicalHistoryPage from "./pages/MedicalHistoryPage";
+import DietPage from "./pages/DietPage";
+import FamilyPage from "./pages/FamilyPage"
 
 function App() {
   const { menuItems } = useHealthData();
@@ -49,6 +52,7 @@ function App() {
           }
         >
           <Route path="/dashboard" element={<HealthDash />} />
+          <Route path="/dashboard/family-page" element={<FamilyPage />} />
           <Route path="/dashboard/profile" element={<ProfilePage />} />
           <Route path="/dashboard/med-history" element={<MedicalHistoryPage />} />
           <Route path="/dashboard/appointments" element={<AppointmentsPage />} />
@@ -56,6 +60,7 @@ function App() {
           <Route path="/dashboard/medications" element={<MedicationPage />} />
           <Route path="/dashboard/lab-results" element={<LabResultsPage />} />
           <Route path="/dashboard/medical-reports" element={<MedicalRecordsPage />} />
+          <Route path="/dashboard/diet-page" element={<DietPage/>}/>
           <Route path="/dashboard/messages" element={<MessagesDashboard />} />
           <Route path="/dashboard/settings" element={<HealthDash />} />
         </Route>
