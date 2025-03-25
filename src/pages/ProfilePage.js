@@ -1,26 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileSection from "../components/Profile/ProfileSection";
 import InfoCard from "../components/Profile/InfoCard";
 import DiseaseProfile from "../components/Profile/DiseaseProfile";
+import {useDispatch,useSelector} from 'react-redux'
+import { loadUserProfile } from "../actions/userActions";
 
 function ProfilePage() {
+  const dispatch = useDispatch()
+  const userProfile = useSelector((state) => state.userProfileReducer.userProfile);
 
   const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(()=>{
+    dispatch(loadUserProfile(3))
+  },[dispatch])
+
   const [personalInfo, setPersonalInfo] = useState([
-    { label: "Date of Birth", value: "March 15, 1985" },
-    { label: "Gender", value: "Female" },
-    { label: "Blood Type", value: "O+", isBold: true },
+    { label: "Date of Birth", value: userProfile?.content?.date_of_birth ||"NA"},
+    { label: "Gender", value: userProfile?.content?.gender ||"NA"},
+    { label: "Blood Type", value:userProfile?.content?.blood_group ||"NA", isBold: true },
     { label: "Height", value: "5'6\"" },
     { label: "Weight", value: "140 lbs" },
   ]);
 
   const [contactInfo,setContactInfo] = useState([
-    { label: "Email", value: "sarah.j@email.com" },
-    { label: "Phone", value: "(555) 123-4567" },
-    { label: "Address", value: "123 Health St, NY" },
-    { label: "Emergency Contact", value: "John (Husband)" },
-    { label: "Emergency Phone", value: "(555) 987-6543" },
+    { label: "Email", value: userProfile?.content?.email ||"NA"},
+    { label: "Phone", value: userProfile?.content?.phone || "NA"},
+    { label: "Address", value: userProfile?.content?.address ||"NA" },
+    { label: "Emergency Contact", value: userProfile?.content?.emergency_contact_name || "NA" },
+    { label: "Emergency Phone", value: userProfile?.content?.emergency_contact || "NA" },
   ]);
 
   const diseases = [
@@ -95,7 +103,7 @@ function ProfilePage() {
       {/* <Sidebar /> */}
       <main className="flex-1 max-sm:p-4 overflow-auto">
         <div className="flex flex-col gap-[32px]">
-          <ProfileSection  isEditing={isEditing} setIsEditing={setIsEditing} />
+          <ProfileSection name={userProfile?.content?.first_name+' '+userProfile?.content?.last_name} isEditing={isEditing} setIsEditing={setIsEditing} />
 
           <section className="grid grid-cols-2 max-sm:grid-cols-1 gap-[24px]">
             <InfoCard

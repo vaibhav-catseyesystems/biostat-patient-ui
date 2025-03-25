@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ProfileSection = ({ isEditing, setIsEditing }) => {
+const ProfileSection = ({ name,isEditing, setIsEditing }) => {
   return (
     <section className="flex max-sm:flex-col items-center gap-[24px]">
       <div className="relative">
@@ -19,7 +19,7 @@ const ProfileSection = ({ isEditing, setIsEditing }) => {
       </div>
       <div className="flex flex-col gap-[8px] max-sm:items-center">
         <h1 className="text-[32px] max-sm:text-[24px] font-semibold text-[#1E293B]">
-          Sarah Johnson
+          {name}
         </h1>
         <p className="text-[16px] text-[#64748B]">Patient ID: #12345</p>
         <div className="flex gap-[16px] mt-[16px] max-sm:flex-col max-sm:w-full">
