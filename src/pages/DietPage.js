@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import DietDashboard from "../components/DietPage/DietDashboard";
 import DietItemsList from "../components/DietPage/DietItemsList";
 import ProductList from "../components/DietPage/ProductList";
+import PageHeader from "../components/common/PageHeader"
+import { getDietPlanList } from "../actions/dietActions";
 
 const DietPage = () => {
-  const [dietItems] = useState([
-    { name: "Oats", weight: "50g", timesPerDay: 1, image: "https://source.unsplash.com/60x60/?oats" },
-    { name: "Chicken", weight: "200g", timesPerDay: 2, image: "https://source.unsplash.com/60x60/?chicken" },
-    { name: "Milk", weight: "250ml", timesPerDay: 1, image: "https://source.unsplash.com/60x60/?milk" },
-  ]);
+  const dispatch = useDispatch()
+  const dietPlanR = useSelector((state) => state.dietPlansReducer)
+  const { dietPlans, loading } = dietPlanR
+  useEffect(() => {
+    dispatch(getDietPlanList())
+    console.log(dietPlans);
+  }, [])
 
-  const [products] = useState([
-    { name: "Protein Powder", calories: 120, price: "20", image: "https://source.unsplash.com/200x150/?protein" },
-    { name: "Almonds", calories: 180, price: "10", image: "https://source.unsplash.com/200x150/?almonds" },
-    { name: "Brown Rice", calories: 220, price: "15", image: "https://source.unsplash.com/200x150/?brownrice" },
-    { name: "Greek Yogurt", calories: 150, price: "8", image: "https://source.unsplash.com/200x150/?yogurt" },
-  ]);
 
   return (
-    <div className="p-6">
-      <DietDashboard />
-      <DietItemsList dietItems={dietItems} />
-      <ProductList products={products} />
+    <div>
+      <PageHeader heading={"Diet"} subheading={"Search and manage your diet plans"} />
+      {loading ? <>Loading</> :
+        <>
+          <DietItemsList dietItems={dietPlans} />
+        </>
+      }
     </div>
   );
 };

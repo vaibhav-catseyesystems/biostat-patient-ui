@@ -18,6 +18,10 @@ import HealthCheckPage from "./pages/HealthCheckPage";
 import MedicalHistoryPage from "./pages/MedicalHistoryPage";
 import DietPage from "./pages/DietPage";
 import FamilyPage from "./pages/FamilyPage"
+import PharmacistPage from "./pages/PharmacistPage";
+import DoctorPage from "./pages/DoctorPage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { menuItems } = useHealthData();
@@ -30,7 +34,7 @@ function App() {
 
   return (
     <>
-
+      <ToastContainer position='top-center' />
       <Routes>
         <Route path="/" element={<LandingHomePage/>} />
         <Route path="/auth" element={<AuthPage/>} />
@@ -58,6 +62,8 @@ function App() {
           <Route path="/dashboard/appointments" element={<AppointmentsPage />} />
           <Route path="/dashboard/health-check" element={<HealthCheckPage />} />
           <Route path="/dashboard/medications" element={<MedicationPage />} />
+          <Route path="/dashboard/doctors" element={<DoctorPage />} />
+          <Route path="/dashboard/pharmacists" element={<PharmacistPage />} />
           <Route path="/dashboard/lab-results" element={<LabResultsPage />} />
           <Route path="/dashboard/medical-reports" element={<MedicalRecordsPage />} />
           <Route path="/dashboard/diet-page" element={<DietPage/>}/>
