@@ -19,7 +19,7 @@ export const getDietPlanList = (page=1) => async (dispatch) => {
         }
       } catch (error) {
         dispatch({
-          type: GET_USER_PROFILE_FAIL,
+          type: GET_DIET_PLANS_FAIL,
           payload: error.response ? error.response.data.message : "Failed to load plans",
         });
         toast.error(error.response ? error.response.data.message : "Failed to load plans");

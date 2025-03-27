@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import DietDashboard from "../components/DietPage/DietDashboard";
 import DietItemsList from "../components/DietPage/DietItemsList";
-import ProductList from "../components/DietPage/ProductList";
 import PageHeader from "../components/common/PageHeader"
 import { getDietPlanList } from "../actions/dietActions";
+import Loader from "../components/common/Loader";
 
 const DietPage = () => {
   const dispatch = useDispatch()
   const dietPlanR = useSelector((state) => state.dietPlansReducer)
-  const { dietPlans, loading } = dietPlanR
+  const { dietPlans, loading, error } = dietPlanR
+  
   useEffect(() => {
     dispatch(getDietPlanList())
     console.log(dietPlans);
@@ -19,11 +19,12 @@ const DietPage = () => {
   return (
     <div>
       <PageHeader heading={"Diet"} subheading={"Search and manage your diet plans"} />
-      {loading ? <>Loading</> :
-        <>
-          <DietItemsList dietItems={dietPlans} />
-        </>
-      }
+      {loading && <Loader />}
+      {error ? (
+        <p className="text-center text-red-500 py-8">Failed to load diet plans. Please try again.</p>
+      ) : (
+        <DietItemsList dietItems={dietPlans} />
+      )}
     </div>
   );
 };

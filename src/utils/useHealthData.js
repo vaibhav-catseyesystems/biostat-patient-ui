@@ -37,8 +37,8 @@ function useHealthData() {
   });
 
   const [menuItems] = useState([
-    { icon: "🏠", title: "Dashboard", active: true, path: "/dashboard" },
     { icon: "👨‍👩‍👧‍👦", title: "Family", active: true, path: "/dashboard/family-page" },
+    { icon: "🏠", title: "My Health", active: true, path: "/dashboard" },
     { icon: "👤", title: "Profile", active: false, path: "/dashboard/profile" },
     { icon: "🗓️", title: "Appointments", active: false, path: "/dashboard/appointments" },
     { icon: "🏥", title: "Health Check", active: false, path: "/dashboard/health-check" },
