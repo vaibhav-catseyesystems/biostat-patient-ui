@@ -1,5 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getLabsList } from "../../actions/findLabActions"
+import { useDispatch, useSelector } from "react-redux";
+import SearchBar from "../common/SearchBar";
 
 const availableLabs = [
   {
@@ -31,11 +34,20 @@ const availableLabs = [
 ];
 
 function FindLabsTab() {
+
+  const dispatch = useDispatch();
+  const { labList, loading, error, pagination = {}} = useSelector((state) => state.labReducer);
+
+  useEffect(() => {
+    dispatch(getLabsList());
+    console.log(labList);
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredLabs = availableLabs.filter(
+  const filteredLabs = labList.filter(
     (lab) =>
-      lab.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lab.lab_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       lab.tests.some((test) =>
         test.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
@@ -44,12 +56,10 @@ function FindLabsTab() {
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search labs by name or test type..."
-          className="w-full px-4 py-3 text-base bg-white rounded-lg border border-gray-200"
+        <SearchBar
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={setSearchQuery}
+          placeholder="Search labs by name or test type..."
         />
       </div>
 
@@ -58,14 +68,14 @@ function FindLabsTab() {
           <header className="flex justify-between items-start mb-4">
             <div>
               <h2 className="text-lg font-medium leading-7 text-slate-800">
-                {lab.name}
+                {lab.lab_name || "NA"}
               </h2>
-              <p className="text-sm text-slate-500">{lab.address}</p>
+              <p className="text-sm text-slate-500">{lab.lab_address || "NA"}</p>
             </div>
             <div className="flex items-center gap-1 px-2 py-1 bg-yellow-50 rounded-lg">
               <span className="text-sm">⭐</span>
               <span className="text-sm font-medium text-slate-800">
-                {lab.rating}
+                {lab.rating || "NA"}
               </span>
             </div>
           </header>
@@ -73,9 +83,17 @@ function FindLabsTab() {
           <div className="mb-4">
             <p className="text-sm text-slate-500 mb-2">
               <span className="font-medium">Distance: </span>
-              {lab.distance}
+              {lab.distance || "NA"}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-sm text-slate-500 mb-2">
+              <span className="font-medium">Email ID: </span>
+              {lab.lab_email || "NA"}
+            </p>
+            <p className="text-sm text-slate-500 mb-2">
+              <span className="font-medium">Contact No: </span>
+              {lab.lab_contact_number || "NA"}
+            </p>
+            {/* <div className="flex flex-wrap gap-2">
               {lab.tests.map((test, i) => (
                 <span
                   key={i}
@@ -84,7 +102,7 @@ function FindLabsTab() {
                   {test}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div className="flex gap-2 max-sm:flex-col">
@@ -95,8 +113,34 @@ function FindLabsTab() {
               View Details
             </button>
           </div>
+
+          
         </article>
+
+        
+
       ))}
+      <div className="flex justify-center gap-4 mt-4">
+                <button
+                    disabled={pagination.page <= 1 || loading}
+                    onClick={() => dispatch(getLabsList(pagination.page - 1))}
+                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                >
+                    Previous
+                </button>
+
+                <span className="text-gray-700 py-2 ">
+                    Page {pagination.page || 1} of {pagination.totalPages || 1}
+                </span>
+
+                <button
+                    disabled={pagination.page >= pagination.totalPages || loading}
+                    onClick={() => dispatch(getLabsList(pagination.page + 1))}
+                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                >
+                    Next
+                </button>
+            </div>
     </div>
   );
 }

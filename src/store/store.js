@@ -2,12 +2,16 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { thunk } from 'redux-thunk'
 import { userLoginReducer, userProfileReducer, userRegisterReducer } from '../reducers/userReducers';
 import { dietPlansReducer } from '../reducers/dietReducers';
+import { medicationReducer } from '../reducers/medicationReducers';
+import { labReducer } from '../reducers/labReducers';
 
 const rootReducer = combineReducers({
     userRegisterReducer,
     userLoginReducer,
     userProfileReducer,
-    dietPlansReducer
+    dietPlansReducer,
+    medicationReducer,
+    labReducer
 })
 
 const middleware = [thunk];

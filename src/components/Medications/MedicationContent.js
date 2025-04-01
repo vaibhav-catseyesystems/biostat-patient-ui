@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MedicationCard from "./MedicationCard";
 import OrderCard from "./OrderCard";
 import SearchResults from "./SearchResults";
+import SearchBar from "../common/SearchBar";
+import { getMedicationsList } from "../../actions/medicationAction";
 
 function MedicationContent({
   activeTab,
@@ -14,17 +17,13 @@ function MedicationContent({
   recentOrders,
   setShowAddModal,
   selectMedicine,
+
 }) {
-  return (
+  const dispatch = useDispatch();
+  const { medicationList, loading, pagination } = useSelector((state) => state.medicationReducer);
+  {
+    return (
       <div className="flex flex-col w-full gap-[32px]">
-        <section className="">
-          <h1 className="text-[32px] max-sm:text-[24px] font-[600] text-[#1E293B]">
-            Medications
-          </h1>
-          <p className="text-[16px] text-[#64748B]">
-            Manage your medications and orders
-          </p>
-        </section>
 
         <div className="flex gap-4 items-center mt-6 mb-8 max-sm:flex-wrap">
           <button
@@ -36,13 +35,9 @@ function MedicationContent({
           </button>
 
           <div className="relative flex-1 max-sm:w-full">
-            <input
-              type="text"
+            <SearchBar
               value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                performSearch();
-              }}
+              onChange={setSearchQuery}
               placeholder="Search medications..."
               className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
             />
@@ -92,8 +87,31 @@ function MedicationContent({
             ))}
           </div>
         )}
+
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            disabled={pagination.page <= 1 || loading}
+            onClick={() => dispatch(getMedicationsList(pagination.page - 1))}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+
+          <span className="text-gray-700 py-2 ">
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+
+          <button
+            disabled={pagination.page >= pagination.totalPages || loading}
+            onClick={() => dispatch(getMedicationsList(pagination.page + 1))}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
-  );
+    );
+  }
 }
 
 export default MedicationContent;

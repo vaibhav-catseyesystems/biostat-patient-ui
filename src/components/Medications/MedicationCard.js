@@ -1,19 +1,26 @@
 import React from "react";
+import CardBase from "../common/CardBase";
 
-function MedicationCard({ medicine }) {
+function MedicationCard({ medicine}) {
   return (
-    <div className="bg-white rounded-[12px] p-6 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)]">
+    <div className="bg-white rounded-[12px] p-6 border-[0.8px] border-[#E9ECEF] hover:shadow-md transition-shadow cursor-pointer">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h2 className="text-[18px] font-[600] text-[#1E293B]">
-            {medicine.name}
+            {medicine.medication_name}
           </h2>
           <p className="text-[14px] text-[#64748B]">
-            {medicine.dosage} • {medicine.frequency}
+            {medicine.medication_code || 'NA'}
+          </p>
+          <p className="text-[14px] text-[#64748B]">
+            {medicine.description || 'NA'}
+          </p>
+          <p className="text-[14px] text-[#64748B]">
+            {medicine.dosage || 'NA'} • {medicine.frequency || "NA"}
           </p>
         </div>
         <span className="px-3 py-1 bg-[#DCFCE7] text-[#166534] text-[12px] font-[500] rounded-full">
-          {medicine.status}
+          {medicine.status || "NA"}
         </span>
       </div>
 
@@ -21,13 +28,13 @@ function MedicationCard({ medicine }) {
         <div>
           <p className="text-[12px] text-[#64748B] mb-1">Prescribed by</p>
           <p className="text-[14px] text-[#1E293B] font-[500]">
-            {medicine.doctor}
+            {medicine.doctor || "NA"}
           </p>
         </div>
         <div>
           <p className="text-[12px] text-[#64748B] mb-1">Last ordered</p>
           <p className="text-[14px] text-[#1E293B] font-[500]">
-            {medicine.lastOrdered}
+            {medicine.lastOrdered || "NA"}
           </p>
         </div>
       </div>
@@ -36,7 +43,7 @@ function MedicationCard({ medicine }) {
         <div>
           <p className="text-[12px] text-[#64748B] mb-1">Next refill</p>
           <p className="text-[14px] text-[#1E293B] font-[500]">
-            {medicine.nextRefill}
+            {medicine.nextRefill || "NA"}
           </p>
         </div>
         <div className="flex gap-2">

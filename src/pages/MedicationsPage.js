@@ -1,37 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddMedicationModal from "../components/Medications/AddMedicationModal";
 import MedicationContent from "../components/Medications/MedicationContent";
+import { getMedicationsList } from "../actions/medicationAction";
+import { useDispatch, useSelector } from "react-redux";
+import PageHeader from "../components/common/PageHeader";
+import Loader from "../components/common/Loader";
 
 function MedicationPage() {
+
+    const dispatch = useDispatch();
+    const { medicationList, loading, error } = useSelector((state) => state.medicationReducer);
+  
+    useEffect(() => {
+      dispatch(getMedicationsList());
+      console.log(medicationList);
+    }, []);
+
     const [activeTab, setActiveTab] = useState("current");
     const [showAddModal, setShowAddModal] = useState(false);
     const [showMedicineModal, setShowMedicineModal] = useState(false);
     const [uploadPrescription, setUploadPrescription] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState();
     const [selectedMedicine, setSelectedMedicine] = useState(null);
 
-    const [currentMedications, setCurrentMedications] = useState([
-        {
-            id: 1,
-            name: "Lisinopril",
-            dosage: "10mg",
-            frequency: "Once daily",
-            nextRefill: "2024-02-20",
-            status: "Active",
-            doctor: "Dr. Sarah Smith",
-            lastOrdered: "2024-01-15",
-        },
-        {
-            id: 2,
-            name: "Metformin",
-            dosage: "500mg",
-            frequency: "Twice daily",
-            nextRefill: "2024-02-25",
-            status: "Active",
-            doctor: "Dr. Michael Chen",
-            lastOrdered: "2024-01-18",
-        },
-    ]);
+    const [currentMedications, setCurrentMedications] = useState([]);
 
     const [recentOrders, setRecentOrders] = useState([
         {
@@ -62,9 +54,9 @@ function MedicationPage() {
             return;
         }
 
-        const searchRes = currentMedications.filter(
-            (medicine) => 
-            medicine.name.toLowerCase().includes(searchQuery.toLowerCase())
+        const searchRes = medicationList.filter(
+            (medicine) =>
+                medicine.medicine_name.toLowerCase().includes(searchQuery.toLowerCase())
         )
         setSearchResults(searchRes);
     };
@@ -75,7 +67,12 @@ function MedicationPage() {
     };
 
     return (
-        <>
+      <div>
+         <PageHeader heading={"Medications"} subheading={"Manage your medications and orders"} />
+      {loading && <Loader />}
+      {error ? (
+        <p className="text-center text-red-500 py-8">Failed to load medications plans. Please try again.</p>
+      ) :(
             <MedicationContent
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
@@ -83,11 +80,11 @@ function MedicationPage() {
                 setSearchQuery={setSearchQuery}
                 performSearch={performSearch}
                 searchResults={searchResults}
-                currentMedications={currentMedications}
+                currentMedications={medicationList}
                 recentOrders={recentOrders}
                 setShowAddModal={setShowAddModal}
                 selectMedicine={selectMedicine}
-            />
+            />)}
             {showAddModal && (
                 <AddMedicationModal
                     setShowAddModal={setShowAddModal}
@@ -95,7 +92,8 @@ function MedicationPage() {
                     setUploadPrescription={setUploadPrescription}
                 />
             )}
-        </>
+      
+      </div>
     );
 }
 

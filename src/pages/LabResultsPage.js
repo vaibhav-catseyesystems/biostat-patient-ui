@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import LabResultCard from "../components/LabResults/LabResultCard";
 import BookTestDialog from "../components/LabResults/BookTestDialog";
 import FindLabsTab from "../components/LabResults/FindLabsTab";
 import UpcomingTestsTab from "../components/LabResults/UpcomingTestsTab";
-
+import { getLabsList } from "../actions/findLabActions";
+import PageHeader from "../components/common/PageHeader";
+import Loader from "../components/common/Loader";
 const labResults = [
     {
         testName: "Complete Blood Count",
@@ -25,6 +28,15 @@ const labResults = [
 
 function LabResultsPage() {
 
+    const dispatch = useDispatch();
+    const { labList, loading, error} = useSelector((state) => state.labReducer);
+
+    useEffect(() => {
+        dispatch(getLabsList());
+        console.log(labList);
+    }, []);
+
+
     const [activeTab, setActiveTab] = useState("results");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -45,14 +57,7 @@ function LabResultsPage() {
 
     return (
         <section className="flex-1 max-md:px-4">
-            <header>
-                <h1 className="mb-4 text-3xl font-semibold leading-10 text-slate-800">
-                    Lab Results
-                </h1>
-                <p className="mb-6 text-base leading-6 text-slate-500">
-                    View your test reports and book new tests
-                </p>
-            </header>
+            <PageHeader heading={"Lab Results"} subheading={"View your lab results and tests"} />
 
             <div className="flex gap-4 mb-8 max-sm:flex-col">
                 <button
@@ -105,7 +110,16 @@ function LabResultsPage() {
                 ))}
             </div>}
             {activeTab === "upcoming" && <UpcomingTestsTab />}
-            {activeTab === "findLabs" && <FindLabsTab />}
+            {activeTab === "findLabs" && (
+                <>
+                    {loading && <Loader />}
+                    {error ? (
+                        <p className="text-center text-red-500 py-8">Failed to load labs. Please try again.</p>
+                    ) : (
+                        <FindLabsTab labs={labList} />
+                    )}
+                </>
+            )}
 
             {isDialogOpen && (
                 <BookTestDialog
@@ -113,7 +127,10 @@ function LabResultsPage() {
                     onBookingComplete={handleBookingComplete}
                 />
             )}
+            
+
         </section>
+
     );
 }
 
