@@ -1,23 +1,18 @@
-"use client";
 import React, { useState } from "react";
 import WelcomeSection from "../components/DashboardHome/WelcomeSection";
 import QuickLinkCard from "../components/DashboardHome/QuickLinkCard";
 import HealthMetricCard from "../components/DashboardHome/HealthMetricCard";
 import useHealthData from "../utils/useHealthData";
-// import FontLoader from "./FontLoader";
+import Modal from "../components/common/Modal";
 
 function HealthDash() {
-  const { healthData, menuItems, quickLinks } = useHealthData();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { healthData, quickLinks } = useHealthData();
   const [selectedMetric, setSelectedMetric] = useState(null);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const onCloseModal = () => {
+    setSelectedMetric(null)
+  }
 
-  const showDetails = (metric) => {
-    setSelectedMetric(selectedMetric === metric ? null : metric);
-  };
 
   return (
     <>
@@ -31,65 +26,93 @@ function HealthDash() {
         </div>
 
         <div className="grid grid-cols-3 gap-[24px] max-lg:grid-cols-2 max-sm:grid-cols-1">
-          <HealthMetricCard
-            title="Blood Pressure"
-            value={`${healthData.bloodPressure.systolic}/${healthData.bloodPressure.diastolic}`}
-            unit="mmHg"
-            trend={healthData.bloodPressure.trend}
-            lastChecked={healthData.bloodPressure.lastChecked}
-            onClick={() => showDetails("bloodPressure")}
-            isSelected={selectedMetric === "bloodPressure"}
-          />
+          {Object.entries(healthData.metrics).map(([key, metric]) => (
+            <HealthMetricCard
+              key={key}
+              title={metric.title}
+              value={metric.value}
+              unit={metric.unit}
+              trend={metric.trend}
+              lastChecked={metric.lastChecked}
+              onClick={() => setSelectedMetric(key)}
+              isSelected={selectedMetric === key}
+            />
+          ))}
 
-          <HealthMetricCard
-            title="Blood Sugar"
-            value={healthData.bloodSugar.value}
-            unit="mg/dL"
-            trend={healthData.bloodSugar.trend}
-            lastChecked={healthData.bloodSugar.lastChecked}
-            onClick={() => showDetails("bloodSugar")}
-            isSelected={selectedMetric === "bloodSugar"}
-          />
-
-          <HealthMetricCard
-            title="White Blood Cells"
-            value={healthData.wbc.value}
-            unit="K/µL"
-            trend={healthData.wbc.trend}
-            lastChecked={healthData.wbc.lastChecked}
-            onClick={() => showDetails("wbc")}
-            isSelected={selectedMetric === "wbc"}
-          />
-
-          <HealthMetricCard
-            title="Heart Rate"
-            value={healthData.heartRate.value}
-            unit="bpm"
-            trend={healthData.heartRate.trend}
-            lastChecked={healthData.heartRate.lastChecked}
-            onClick={() => showDetails("heartRate")}
-            isSelected={selectedMetric === "heartRate"}
-          />
-
-          <HealthMetricCard
-            title="Temperature"
-            value={healthData.temperature.value}
-            unit="°F"
-            trend={healthData.temperature.trend}
-            lastChecked={healthData.temperature.lastChecked}
-            onClick={() => showDetails("temperature")}
-            isSelected={selectedMetric === "temperature"}
-          />
-
-          <HealthMetricCard
-            title="Oxygen Level"
-            value={healthData.oxygenLevel.value}
-            unit="%"
-            trend={healthData.oxygenLevel.trend}
-            lastChecked={healthData.oxygenLevel.lastChecked}
-            onClick={() => showDetails("oxygenLevel")}
-            isSelected={selectedMetric === "oxygenLevel"}
-          />
+          {selectedMetric && <Modal title={healthData.metrics[selectedMetric].title} isOpen={true} onClose={onCloseModal}
+            children={
+              <>
+                <div className="space-y-2">
+                  <p className="text-[16px] text-[#1e293b] "><span className="font-bold">Value: </span> {healthData.metrics[selectedMetric].value} {healthData.metrics[selectedMetric].unit} <span className="font-bold">Trend: </span>{healthData.metrics[selectedMetric].trend}</p>
+                  <p className="text-[16px] text-[#1e293b]"><span className="font-bold">Last Checked:</span> {healthData.metrics[selectedMetric].lastChecked}</p>
+                </div>
+                <div class="relative overflow-x-auto">
+                  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" class="px-6 py-3">
+                          Product name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Color
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Category
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Price
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Apple MacBook Pro 17"
+                        </th>
+                        <td class="px-6 py-4">
+                          Silver
+                        </td>
+                        <td class="px-6 py-4">
+                          Laptop
+                        </td>
+                        <td class="px-6 py-4">
+                          $2999
+                        </td>
+                      </tr>
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Microsoft Surface Pro
+                        </th>
+                        <td class="px-6 py-4">
+                          White
+                        </td>
+                        <td class="px-6 py-4">
+                          Laptop PC
+                        </td>
+                        <td class="px-6 py-4">
+                          $1999
+                        </td>
+                      </tr>
+                      <tr class="bg-white dark:bg-gray-800">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                          Black
+                        </td>
+                        <td class="px-6 py-4">
+                          Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                          $99
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            }
+          />}
         </div>
       </div>
     </>

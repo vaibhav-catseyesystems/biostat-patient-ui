@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UploadMedRecordModal from "../components/MedicalRecords/UploadMedRecordModal";
 import ViewMedRecordModal from "../components/MedicalRecords/ViewMedRecordModal";
 import MedRecordsList from "../components/MedicalRecords/MedRecordsList";
+import PageHeader from "../components/common/PageHeader";
+import SearchBar from "../components/common/SearchBar";
+import { BioStatButton } from "../components/common/BioStatButton";
+import { toast } from 'react-toastify'
+import { fetchRecordsFromGmail, getUserMedicalRecords, } from "../actions/medicalRecordActions";
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from "../components/common/Loader";
 
 const MedicalRecordsPage = () => {
+  const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState("all");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showRecordModal, setShowRecordModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [mobileMenu, setMobileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const medicalRecordsReducer = useSelector((state) => state.medicalRecordsReducer)
+  const { medicalRecords, loading, error } = medicalRecordsReducer
 
   const recordTypes = [
     "Insurance",
@@ -19,110 +28,84 @@ const MedicalRecordsPage = () => {
     "Surgeries",
   ];
 
-  const records = [
-    {
-      id: 1,
-      type: "Insurance",
-      title: "Health Insurance Policy",
-      date: "2024-01-15",
-      provider: "BlueCross Insurance",
-      status: "Active",
-      details: "Policy #ABC123456",
-      file: "insurance_doc.pdf",
-    },
-    {
-      id: 2,
-      type: "Test Reports",
-      title: "Annual Blood Work",
-      date: "2024-01-10",
-      provider: "City Hospital Lab",
-      status: "Completed",
-      details: "Complete Blood Count, Lipid Panel",
-      file: "blood_work.pdf",
-    },
-    {
-      id: 3,
-      type: "Prescriptions",
-      title: "Monthly Medication",
-      date: "2024-01-05",
-      provider: "Dr. Sarah Smith",
-      status: "Active",
-      details: "Prescription for Lisinopril 10mg",
-      file: "prescription.pdf",
-    },
-  ];
-
   const selectRecord = (record) => {
     setSelectedRecord(record);
     setShowRecordModal(true);
   };
 
+  const syncMail = async () => {
+    fetchRecordsFromGmail()
+  };
+
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    if (status == "processing") {
+      toast.success("Emails syncing in progress you'll be notified once done")
+
+      setTimeout(() => {
+        urlParams.delete('status');
+        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+        window.history.replaceState({}, '', newUrl);
+      }, 3000);
+    }
+  }, [])
+
+  useEffect(()=>{
+    dispatch(getUserMedicalRecords())
+  },[])
+
   return (
     <>
-        <div className="flex flex-col gap-[32px]">
-          <div className="">
-            <header className="flex flex-col gap-4">
-              <h1 className="text-[32px] max-sm:text-[24px] font-[600] text-[#1E293B]">
-                Medical Records
-              </h1>
-              <p className="text-[16px] text-[#64748B]">
-                View and manage your health records
-              </p>
-            </header>
+      <div className="flex flex-col gap-[32px]">
+        <div className="">
+          <PageHeader heading={"Medical Records"} subheading={"View and manage your health records"} />
 
-            <div className="flex gap-4 items-center mt-6 mb-8 max-sm:flex-wrap">
-              <button
-                onClick={() => setShowUploadModal(true)}
-                className="bg-[#4318D1] text-white px-6 py-3 rounded-[8px] font-[500] max-sm:w-full flex items-center justify-center gap-2"
-              >
-                <span>Upload New Record</span>
-                <span className="text-[20px]">📤</span>
-              </button>
-              <div className="relative flex-1 max-sm:w-full">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search records..."
-                  className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
-                />
-              </div>
-            </div>
+          <div className="flex gap-4 items-center mt-6 mb-8 max-sm:flex-wrap">
+            <BioStatButton title={"Upload New Record"} onclick={() => setShowUploadModal(true)} icon={"📤"} />
+            <BioStatButton title={"Sync Mail"} onclick={() => syncMail()} icon={"✉️"} />
+            <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search records..." />
+          </div>
 
-            <div className="flex gap-2 mb-6 flex-wrap pb-2">
-              <button
-                onClick={() => setActiveTab("all")}
-                className={`px-6 py-3 rounded-[8px] font-[500] whitespace-nowrap ${
-                  activeTab === "all"
-                    ? "bg-[#4318D1] text-white"
-                    : "bg-[#F1F5F9] text-[#64748B]"
+          <div className="flex gap-2 mb-6 flex-wrap pb-2">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-6 py-3 rounded-[8px] font-[500] whitespace-nowrap ${activeTab === "all"
+                ? "bg-[#4318D1] text-white"
+                : "bg-[#F1F5F9] text-[#64748B]"
                 }`}
-              >
-                All Records
-              </button>
-              {recordTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setActiveTab(type.toLowerCase())}
-                  className={`px-6 py-3 rounded-[8px] font-[500] whitespace-nowrap ${
-                    activeTab === type.toLowerCase()
-                      ? "bg-[#4318D1] text-white"
-                      : "bg-[#F1F5F9] text-[#64748B]"
+            >
+              All Records
+            </button>
+            {recordTypes.map((type) => (
+              <button
+                key={type}
+                onClick={() => setActiveTab(type.toLowerCase())}
+                className={`px-6 py-3 rounded-[8px] font-[500] whitespace-nowrap ${activeTab === type.toLowerCase()
+                  ? "bg-[#4318D1] text-white"
+                  : "bg-[#F1F5F9] text-[#64748B]"
                   }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
+              >
+                {type}
+              </button>
+            ))}
+          </div>
 
+          {loading && <Loader />}
+          {error ? (
+            <p className="text-center text-red-500 py-8">Failed to load medical records. Please try again.</p>
+          ) : (
             <MedRecordsList
-              records={records}
+              records={medicalRecords}
               selectRecord={selectRecord}
               activeTab={activeTab}
               searchQuery={searchQuery}
             />
-          </div>
+          )}
+
         </div>
+      </div>
 
       {showUploadModal && (
         <UploadMedRecordModal

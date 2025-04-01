@@ -1,38 +1,50 @@
-"use client";
 import { useState } from "react";
 
 function useHealthData() {
   const [healthData] = useState({
-    bloodPressure: {
-      systolic: 120,
-      diastolic: 80,
-      trend: "stable",
-      lastChecked: "2 hours ago",
-    },
-    bloodSugar: {
-      value: 95,
-      trend: "decreasing",
-      lastChecked: "4 hours ago",
-    },
-    wbc: {
-      value: 7.5,
-      trend: "increasing",
-      lastChecked: "1 day ago",
-    },
-    heartRate: {
-      value: 72,
-      trend: "stable",
-      lastChecked: "1 hour ago",
-    },
-    temperature: {
-      value: 98.6,
-      trend: "stable",
-      lastChecked: "3 hours ago",
-    },
-    oxygenLevel: {
-      value: 98,
-      trend: "stable",
-      lastChecked: "30 mins ago",
+    metrics: {
+      bloodPressure: {
+        title: "Blood Pressure",
+        value: '120/80',
+        unit: "mmHg",
+        trend: "stable",
+        lastChecked: "2 hours ago",
+      },
+      bloodSugar: {
+        title: "Blood Sugar",
+        value: 95,
+        unit: "mg/dL",
+        trend: "decreasing",
+        lastChecked: "4 hours ago",
+      },
+      wbc: {
+        title: "White Blood Cells",
+        value: 7.5,
+        unit: "K/µL",
+        trend: "increasing",
+        lastChecked: "1 day ago",
+      },
+      heartRate: {
+        title: "Heart Rate",
+        value: 72,
+        unit: "bpm",
+        trend: "stable",
+        lastChecked: "1 hour ago",
+      },
+      temperature: {
+        title: "Temperature",
+        value: 98.6,
+        unit: "°F",
+        trend: "stable",
+        lastChecked: "3 hours ago",
+      },
+      oxygenLevel: {
+        title: "Oxygen Level",
+        value: 98,
+        unit: "%",
+        trend: "stable",
+        lastChecked: "30 mins ago",
+      },
     },
   });
 
@@ -54,7 +66,7 @@ function useHealthData() {
     { title: "Appointments", icon: "🗓️", count: 2 },
     { title: "Medications", icon: "💊", count: 4 },
     { title: "Lab Results", icon: "🔬", count: 1 },
-    { title: "Message" ,icon: "✉️", count: 3 },
+    { title: "Message", icon: "✉️", count: 3 },
   ]);
 
   return {

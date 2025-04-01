@@ -20,7 +20,7 @@ const CardBase = ({
         />
         <div>
           <h2 className="text-[18px] font-medium text-[#1E293B]">{title}</h2>
-          <p className="text-[14px] text-[#64748B]">{subtitle}</p>
+          <p className="text-[14px] text-[#64748B] max-w-[70ch] truncate">{subtitle}</p>
           {(rating || location) && (
             <div className="flex items-center gap-2 mt-1">
               {rating && (

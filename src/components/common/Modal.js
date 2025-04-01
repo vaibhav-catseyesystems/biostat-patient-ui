@@ -18,7 +18,7 @@ const Modal = ({ isOpen, onClose, title, children, width = "600px" }) => {
           </h2>
           <button
             onClick={onClose}
-            className="text-[24px] text-[#64748B]"
+            className="text-[24px] text-[#64748B] cursor-pointer"
             aria-label="Close modal"
           >
             ✕

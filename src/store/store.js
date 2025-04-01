@@ -4,12 +4,14 @@ import { userLoginReducer, userProfileReducer, userRegisterReducer } from '../re
 import { dietPlansReducer } from '../reducers/dietReducers';
 import { medicationReducer } from '../reducers/medicationReducers';
 import { labReducer } from '../reducers/labReducers';
+import { medicalRecordsReducer } from '../reducers/medicalRecordReducers';
 
 const rootReducer = combineReducers({
     userRegisterReducer,
     userLoginReducer,
     userProfileReducer,
     dietPlansReducer,
+    medicalRecordsReducer,
     medicationReducer,
     labReducer
 })
