@@ -5,6 +5,7 @@ import { dietPlansReducer } from '../reducers/dietReducers';
 import { medicationReducer } from '../reducers/medicationReducers';
 import { labReducer } from '../reducers/labReducers';
 import { medicalRecordsReducer } from '../reducers/medicalRecordReducers';
+import { userPrescriptionReducer } from '../reducers/userPrescriptionReducers';
 
 const rootReducer = combineReducers({
     userRegisterReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     dietPlansReducer,
     medicalRecordsReducer,
     medicationReducer,
+    userPrescriptionReducer,
     labReducer
 })
 

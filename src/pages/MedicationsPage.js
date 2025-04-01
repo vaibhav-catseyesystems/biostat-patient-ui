@@ -5,25 +5,16 @@ import { getMedicationsList } from "../actions/medicationAction";
 import { useDispatch, useSelector } from "react-redux";
 import PageHeader from "../components/common/PageHeader";
 import Loader from "../components/common/Loader";
+import SearchBar from "../components/common/SearchBar";
+import { BioStatButton } from "../components/common/BioStatButton";
 
 function MedicationPage() {
 
     const dispatch = useDispatch();
-    const { medicationList, loading, error } = useSelector((state) => state.medicationReducer);
-  
-    useEffect(() => {
-      dispatch(getMedicationsList());
-      console.log(medicationList);
-    }, []);
-
-    const [activeTab, setActiveTab] = useState("current");
+    const { loading, error } = useSelector((state) => state.medicationReducer);
     const [showAddModal, setShowAddModal] = useState(false);
-    const [showMedicineModal, setShowMedicineModal] = useState(false);
     const [uploadPrescription, setUploadPrescription] = useState(false);
-    const [searchQuery, setSearchQuery] = useState();
-    const [selectedMedicine, setSelectedMedicine] = useState(null);
-
-    const [currentMedications, setCurrentMedications] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const [recentOrders, setRecentOrders] = useState([
         {
@@ -46,54 +37,42 @@ function MedicationPage() {
         },
     ]);
 
-    const [searchResults, setSearchResults] = useState([]);
-
-    const performSearch = () => {
-        if (searchQuery.trim() === "") {
-            setSearchResults([]);
-            return;
-        }
-
-        const searchRes = medicationList.filter(
-            (medicine) =>
-                medicine.medicine_name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        setSearchResults(searchRes);
-    };
-
-    const selectMedicine = (medicine) => {
-        setSelectedMedicine(medicine);
-        setShowMedicineModal(true);
-    };
+    useEffect(() => {
+        dispatch(getMedicationsList());
+    }, []);
 
     return (
-      <div>
-         <PageHeader heading={"Medications"} subheading={"Manage your medications and orders"} />
-      {loading && <Loader />}
-      {error ? (
-        <p className="text-center text-red-500 py-8">Failed to load medications plans. Please try again.</p>
-      ) :(
-            <MedicationContent
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                performSearch={performSearch}
-                searchResults={searchResults}
-                currentMedications={medicationList}
-                recentOrders={recentOrders}
-                setShowAddModal={setShowAddModal}
-                selectMedicine={selectMedicine}
-            />)}
+        <div>
+            <PageHeader heading={"Medications"} subheading={"Manage your medications and orders"} />
+            <div className="flex gap-4 items-center mt-6 mb-8 max-sm:flex-wrap">
+                <BioStatButton title={"Add Medication"} icon={'💊'} onclick={() => setShowAddModal(true)} />
+                <div className="relative flex-1 max-sm:w-full">
+                    <SearchBar
+                        value={searchQuery}
+                        onChange={setSearchQuery}
+                        placeholder="Search medications..."
+                        className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
+                    />
+                </div>
+            </div>
+            {loading && <Loader />}
+            {error ? (
+                <p className="text-center text-red-500 py-8">Failed to load medications plans. Please try again.</p>
+            ) : (
+                <MedicationContent
+                    searchQuery={searchQuery}
+                    recentOrders={recentOrders}
+                />)}
+
             {showAddModal && (
                 <AddMedicationModal
-                    setShowAddModal={setShowAddModal}
+                    closeModal={() => setShowAddModal(false)}
                     uploadPrescription={uploadPrescription}
                     setUploadPrescription={setUploadPrescription}
                 />
             )}
-      
-      </div>
+
+        </div>
     );
 }
 

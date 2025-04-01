@@ -1,160 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import Modal from "../common/Modal";
+import { addUserMedicalRecord } from "../../actions/medicalRecordActions";
 
-function AddMedicationModal({
-  setShowAddModal,
-  uploadPrescription,
-  setUploadPrescription,
-}) {
+function AddMedicationModal({closeModal}) {
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
+  const dispatch=useDispatch()
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (!file) {
+        alert("Please select a file to upload.");
+        return;
+      }
+      let data = new FormData();
+      data.append('file', file);
+      data.append('upload_source', 'MANUAL');
+      data.append('record_type', "Prescriptions");
+      data.append('description', description);
+       dispatch(addUserMedicalRecord(data))
+      closeModal();
+    };
+
   return (
-    <div className="fixed inset-0 bg-[#000000] bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
-      <div className="bg-white rounded-[13px] p-8 max-w-[500px] w-full mx-4">
-        <div className="flex justify-between items-start mb-6">
-          <h2 className="text-[24px] font-[600] text-[#1E293B]">
-            Add New Medication
-          </h2>
-          <button
-            onClick={() => setShowAddModal(false)}
-            className="text-[24px] text-[#64748B]"
-            aria-label="Close modal"
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setUploadPrescription(false)}
-            className={`
-              px-4 py-2 rounded-[8px] font-[500] flex-1
-              ${!uploadPrescription ? "bg-[#4318D1] text-white" : "bg-[#F1F5F9] text-[#64748B]"}
-            `}
-          >
-            Manual Entry
-          </button>
-          <button
-            onClick={() => setUploadPrescription(true)}
-            className={`
-              px-4 py-2 rounded-[8px] font-[500] flex-1
-              ${uploadPrescription ? "bg-[#4318D1] text-white" : "bg-[#F1F5F9] text-[#64748B]"}
-            `}
-          >
-            Upload Prescription
-          </button>
-        </div>
-
-        {!uploadPrescription ? (
-          <div className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="medication-name"
-                className="text-[14px] font-[500] text-[#1E293B]"
-              >
-                Medication Name
-              </label>
-              <input
-                id="medication-name"
-                type="text"
-                placeholder="Enter medication name"
-                className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="dosage"
-                className="text-[14px] font-[500] text-[#1E293B]"
-              >
-                Dosage
-              </label>
-              <input
-                id="dosage"
-                type="text"
-                placeholder="Enter dosage (e.g., 10mg)"
-                className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="frequency"
-                className="text-[14px] font-[500] text-[#1E293B]"
-              >
-                Frequency
-              </label>
-              <select
-                id="frequency"
-                className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
-              >
-                <option value="">Select frequency</option>
-                <option value="once-daily">Once daily</option>
-                <option value="twice-daily">Twice daily</option>
-                <option value="three-times-daily">Three times daily</option>
-                <option value="as-needed">As needed</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="prescribing-doctor"
-                className="text-[14px] font-[500] text-[#1E293B]"
-              >
-                Prescribing Doctor
-              </label>
-              <input
-                id="prescribing-doctor"
-                type="text"
-                placeholder="Enter doctor's name"
-                className="w-full px-4 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
-              />
-            </div>
-
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="px-6 py-3 bg-[#F1F5F9] text-[#64748B] rounded-[8px] font-[500]"
-              >
-                Cancel
-              </button>
-              <button className="px-6 py-3 bg-[#4318D1] text-white rounded-[8px] font-[500]">
-                Add Medication
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="border-2 border-dashed border-[#E9ECEF] rounded-[8px] p-8 text-center">
-              <div className="flex flex-col items-center gap-3">
-                <span className="text-[32px]">📄</span>
-                <h3 className="text-[16px] font-[500] text-[#1E293B]">
-                  Drag and drop your prescription
-                </h3>
-                <p className="text-[14px] text-[#64748B]">
-                  or{" "}
-                  <span className="text-[#4318D1] cursor-pointer">
-                    browse files
-                  </span>
-                </p>
-                <p className="text-[12px] text-[#64748B] mt-2">
-                  Supported formats: PDF, JPG, PNG (max 5MB)
-                </p>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="px-6 py-3 bg-[#F1F5F9] text-[#64748B] rounded-[8px] font-[500]"
-              >
-                Cancel
-              </button>
-              <button className="px-6 py-3 bg-[#4318D1] text-white rounded-[8px] font-[500]">
-                Upload Prescription
-              </button>
-            </div>
-          </div>
-        )}
+    <Modal isOpen={true} onClose={closeModal} title="Add New Prescription">
+    <form onSubmit={handleSubmit} className="space-y-2">
+      <div className="flex flex-col gap-2">
+        <label htmlFor="description"
+          className="text-[14px] font-[500] text-[#1E293B]"
+        >Description</label>
+        <textarea
+          id="description"
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Enter prescription description"
+          className="w-full px-4 py-2 rounded-[8px] border-[0.8px] border-[#E9ECEF] bg-white"
+          required
+        />
       </div>
-    </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-[14px] font-[500] text-[#1E293B]">
+          Upload File
+        </label>
+        <div className="border-[2px] border-dashed border-[#E9ECEF] rounded-[8px] p-4 text-center">
+          <span className="text-[38px] block mb-2">📄</span>
+          <p className="text-[14px] text-[#64748B] mb-4">Drag and drop your file here or</p>
+          <label htmlFor="fileUpload" className="px-2 py-2 bg-[#F1F5F9] text-[#64748B] rounded-[8px] cursor-pointer">
+            Browse Files
+          </label>
+          <input id="fileUpload" type="file"
+            onChange={(e) => {setFile(e.target.files[0])}}
+            className="hidden"
+          />
+          {file && <p className="text-[14px] text-green-600 mt-2">Selected file: {file.name}</p>}
+        </div>
+      </div>
+      <div className="flex gap-2 justify-end mt-4">
+        <button type="button" onClick={closeModal} className="px-6 py-3 rounded-[8px] border-[0.8px] border-[#E9ECEF] text-[#1E293B] max-lg:order-2" >
+          Cancel </button>
+        <button type="submit" className="px-6 py-3 rounded-[8px] bg-[#4318D1] text-white max-lg:order-1">
+          Upload Prescription
+        </button>
+      </div>
+    </form>
+  </Modal>
   );
 }
 

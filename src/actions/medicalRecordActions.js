@@ -6,7 +6,7 @@ import { MED_RECORDS, SYNC_MAIL } from "../utils/URLs";
 export const getUserMedicalRecords = () => async (dispatch) => {
     dispatch({ type: GET_USER_MED_RECORDS_REQUEST })
     try {
-        const response = await apiClient.post(`${MED_RECORDS}/124`);
+        const response = await apiClient.post(`${MED_RECORDS}/123`);
         if (response.data.status_code === 200) {
             dispatch({
                 type: GET_USER_MED_RECORDS_SUCCESS, payload: {
@@ -36,7 +36,7 @@ export const addUserMedicalRecord = (data) => async (dispatch) => {
         });
         if (response.data.status_code === 200) {
             dispatch({type: ADD_USER_MED_RECORD_SUCCESS, payload:response.data.content});
-            console.log(response.data);
+            toast.success(response.data.message?response.data.message:"Prescription uploaded successfully")
         } else {
             dispatch({ type: ADD_USER_MED_RECORD_FAIL, payload: response.data.error });
             toast.error(response.data.message);
@@ -48,7 +48,6 @@ export const addUserMedicalRecord = (data) => async (dispatch) => {
         });
         toast.error(error.response ? error.response.data.message : "Failed to load plans");
     }
-
 }
 
 export const fetchRecordsFromGmail = async () => {

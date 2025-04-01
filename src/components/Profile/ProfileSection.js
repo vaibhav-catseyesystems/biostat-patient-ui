@@ -29,9 +29,13 @@ const ProfileSection = ({ name,isEditing, setIsEditing }) => {
           >
             {isEditing ? "💾 Save Profile" : "✏️ Edit Profile"}
           </button>
-          <Link to={'/dashboard/med-history'} className="bg-[#F1F5F9] text-[#1E293B] px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full">
+          <Link to={'/dashboard/med-history'} className="bg-[#F1F5F9] text-[#1E293B] border px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full">
             📋 Medical History
           </Link>
+          <Link to={'/dashboard/my-prescriptions'} className="bg-[#F1F5F9] text-[#1E293B] border px-6 py-3 rounded-[8px] text-[14px] font-medium flex items-center justify-center gap-2 max-sm:w-full">
+            💊 My Prescriptions
+          </Link>
+
         </div>
       </div>
     </section>
