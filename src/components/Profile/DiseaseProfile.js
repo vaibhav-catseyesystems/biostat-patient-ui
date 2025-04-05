@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDiseaseProfile } from "../../actions/diseaseProfileActions";
 
 const DiseaseProfile = ({ disease }) => {
-  const [showAllPrecautions, setShowAllPrecautions] = useState(false);
+  const [showAllCauses, setShowAllCauses] = useState(false);
   const [showAllDiet, setShowAllDiet] = useState(false);
   const [showAllSymptoms, setShowAllSymptoms] = useState(false);
 
@@ -54,6 +56,14 @@ const DiseaseProfile = ({ disease }) => {
       day: "numeric",
     });
   };
+
+  const dispatch = useDispatch();
+  const { symptomsList, causesList, dietList, loading, error } = useSelector((state) => state.diseaseProfilesReducer);
+
+
+  useEffect(() => {
+    dispatch(getDiseaseProfile());
+  }, []);
 
   return (
     <article className="bg-white p-6 rounded-[13px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)]">
@@ -144,45 +154,44 @@ const DiseaseProfile = ({ disease }) => {
             </button>
           </div>
           <ul className="flex flex-col gap-2">
-            {disease.symptoms
-              .slice(0, showAllSymptoms ? disease.symptoms.length : 3)
-              .map((symptom, index) => (
-                <li
-                  key={index}
-                  className="text-[14px] text-[#64748B] flex items-center gap-2"
-                >
-                  <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span>
-                  {symptom}
-                </li>
+            {symptomsList
+              .slice(0, showAllSymptoms ? symptomsList.length : 3).map((symptom, index) => (symptom?.disease_profile?.disease?.symptoms?.length > 0 ? (
+                  symptom.disease_profile.disease.symptoms.map((symptomItem, symptomIndex) => (
+                    <li key={`${index}-${symptomIndex}`} className="text-[14px] text-[#64748B] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span>
+                      {symptomItem.symptom_name}
+                    </li>))
+                ) : ( <li key={index} className="text-[14px] text-[#64748B] flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span> NA </li> )
               ))}
           </ul>
+
         </div>
 
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <h4 className="text-[16px] font-medium text-[#1E293B]">
-              Precautions
+              Causes
             </h4>
             <button
-              onClick={() => setShowAllPrecautions(!showAllPrecautions)}
+              onClick={() => setShowAllCauses(!showAllCauses)}
               className="text-[14px] text-[#4318D1]"
             >
-              {showAllPrecautions ? "Show Less" : "Show All"}
+              {showAllCauses ? "Show Less" : "Show All"}
             </button>
           </div>
           <ul className="flex flex-col gap-2">
-            {disease.precautions
-              .slice(0, showAllPrecautions ? disease.precautions.length : 3)
-              .map((precaution, index) => (
-                <li
-                  key={index}
-                  className="text-[14px] text-[#64748B] flex items-center gap-2"
-                >
-                  <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span>
-                  {precaution}
-                </li>
+            {causesList
+              .slice(0, showAllCauses ? causesList.length : 3)
+              .map((cause, index) => (cause?.disease_profile?.disease?.causes?.length > 0 ? (cause.disease_profile.disease.causes.map((causeItem, causeIndex) => (
+                <li key={`${index}-${causeIndex}`} className="text-[14px] text-[#64748B] flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span>{causeItem.cause_name}
+                </li>))
+              ) : (<li key={index} className="text-[14px] text-[#64748B] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span> NA </li>)
               ))}
           </ul>
+
         </div>
 
         <div className="flex flex-col gap-2">
@@ -198,18 +207,19 @@ const DiseaseProfile = ({ disease }) => {
             </button>
           </div>
           <ul className="flex flex-col gap-2">
-            {disease.diet
-              .slice(0, showAllDiet ? disease.diet.length : 3)
-              .map((diet, index) => (
-                <li
-                  key={index}
-                  className="text-[14px] text-[#64748B] flex items-center gap-2"
-                >
-                  <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span>
-                  {diet}
-                </li>
+            {dietList
+              .slice(0, showAllDiet ? dietList.length : 3)
+              .map((diet, index) => (diet?.disease_profile?.disease?.diet_recommendations?.length > 0 ? (diet.disease_profile.disease.diet_recommendations.map((dietPlan, dietIndex) => (
+                    <li key={`${index}-${dietIndex}`} className="text-[14px] text-[#64748B] flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span> {dietPlan.name}
+                    </li> ))
+                ) : ( <li key={index}
+                    className="text-[14px] text-[#64748B] flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#4318D1]"></span> NA </li>
+                )
               ))}
           </ul>
+
         </div>
       </div>
     </article>

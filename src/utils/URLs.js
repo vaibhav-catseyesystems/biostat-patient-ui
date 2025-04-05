@@ -6,3 +6,5 @@ export const LABS_INFO = "/api/v1/diagnostic-lab" // http://{{url}}/api/v1/diagn
 export const MED_RECORDS = "/v1/medical_records/medical_records"// http://{{biostat_server_url}}/v1/tbl_medical_records/medical_records?page=1&limit=10
 export const SYNC_MAIL = "/v1/mail/login"
 export const PATIENT_PRESCRIPTION = "/v1/patient/patient-prescription/" // http://{{biostat_server_url}}/v1/patient/patient-prescription/5
+export const DISEASE_PROFILE = "/v1/patient/patient-disease-condition/1" //http://{{biostat_server_url}}/v1/patient/patient-disease-condition/1
+export const MEMBER_INFO = "/v1/user/create-by-patient/4" //http://{{biostat_server_url}}/v1/user/create-by-patient/4

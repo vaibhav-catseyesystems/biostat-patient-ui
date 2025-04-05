@@ -29,11 +29,11 @@ function RegisterForm() {
     let user = {
       "first_name": formData.firstName,
       "last_name": formData.lastName,
-      "role": "patient",
+      "role_name": "patient",
       "username": formData.phone,
       "password": formData.password,
       "email": formData.email,
-      "contact_info": formData.phone
+      "mobile_no": formData.phone
     }
     dispatch(registerUser(user))
     console.log("Registration data:", formData);

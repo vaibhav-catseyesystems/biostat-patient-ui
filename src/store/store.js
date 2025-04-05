@@ -6,6 +6,9 @@ import { medicationReducer } from '../reducers/medicationReducers';
 import { labReducer } from '../reducers/labReducers';
 import { medicalRecordsReducer } from '../reducers/medicalRecordReducers';
 import { userPrescriptionReducer } from '../reducers/userPrescriptionReducers';
+import { diseaseProfilesReducer } from '../reducers/diseaseProfileReducers';
+import { memberReducer } from '../reducers/memberReducers';
+import { caregiverReducer } from '../reducers/caregiverReducers';
 
 const rootReducer = combineReducers({
     userRegisterReducer,
@@ -15,7 +18,10 @@ const rootReducer = combineReducers({
     medicalRecordsReducer,
     medicationReducer,
     userPrescriptionReducer,
-    labReducer
+    labReducer,
+    diseaseProfilesReducer,
+    memberReducer,
+    caregiverReducer
 })
 
 const middleware = [thunk];
